@@ -1,0 +1,55 @@
+# -*- coding: utf-8 -*-
+from base.permissions import permissions, IsOwnerOrReadOnly
+from base.views import BaseAPIView
+from rest_framework.generics import GenericAPIView
+from rest_framework import mixins
+from .serializers import ({{ camel_case_app_name }},
+                          {{ camel_case_app_name }}Serializer, )
+
+
+class {{ camel_case_app_name }}List(BaseAPIView, mixins.ListModelMixin, mixins.CreateModelMixin, GenericAPIView):
+    """
+    列表
+    """
+    pagination_class = None
+    permission_classes = (permissions.AllowAny,)
+    serializer_class = {{ camel_case_app_name }}Serializer
+
+    def get_queryset(self):
+        queryset = {{ camel_case_app_name }}.objects.all()
+        return queryset
+
+    def _get(self, request, *args, **kwargs):
+        res = self.list(request, *args, **kwargs)
+        self.result["data"] = res.data
+
+    def _post(self, request, *args, **kwargs):
+        res = self.create(request, *args, **kwargs)
+        self.result["data"] = res.data
+
+
+class {{ camel_case_app_name }}Detail(BaseAPIView, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, GenericAPIView):
+    """
+    详情
+    """
+    pagination_class = None
+    permission_classes = (permissions.AllowAny,)
+    serializer_class = {{ camel_case_app_name }}Serializer
+    owner_field = 'user'
+    lookup_field = 'pk'
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset = {{ camel_case_app_name }}.objects.filter(user=user)
+        return queryset
+
+    def _get(self, request, *args, **kwargs):
+        res = self.retrieve(request, *args, **kwargs)
+        self.result["data"] = res.data
+
+    def _put(self, request, *args, **kwargs):
+        res = self.partial_update(request, *args, **kwargs)
+        self.result["data"] = res.data
+
+    def _delete(self, request, *args, **kwargs):
+        self.result = self.destroy(request, *args, **kwargs)

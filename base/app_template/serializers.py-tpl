@@ -1,0 +1,9 @@
+# -*- coding: utf-8
+from rest_framework import serializers
+from .models import {{ camel_case_app_name }}
+
+
+class {{ camel_case_app_name }}Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = {{ camel_case_app_name }}  # 定义关联的 Model
+        fields = '__all__'

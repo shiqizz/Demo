@@ -1,0 +1,9 @@
+# -*- coding: utf-8
+from base.models import *
+
+
+# Create your models here.
+class {{ camel_case_app_name }}(BaseModel):
+
+    class Meta:
+        ordering = ['-sys_add_time']
